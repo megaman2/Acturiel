@@ -546,8 +546,8 @@ public class Fenetre extends JFrame implements ActionListener{
 	 * @param donnees Un tableau de tableau, qui repr�sente la JTable.
 	 * @return Retourne un JPanel qui contiendra 3 JFreeCharts.
 	 */
-	public JPanel createurJfreeChart(Object[][] donnees){
-		// La partie droite contiendra : les JFreeChart
+	//public JPanel createurJfreeChart(Object[][] donnees){}
+		/*// La partie droite contiendra : les JFreeChart
 
 		// on ajoute les data d'un etudiant a� mettre dans une methode ...
 		JPanel jFreeChartDroite = new JPanel();
@@ -575,40 +575,40 @@ public class Fenetre extends JFrame implements ActionListener{
 		DefaultPieDataset data = new DefaultPieDataset();
 		data.setValue("Note < 10",(double)inf);
 		data.setValue("Note > 10",(double)sup);
-		ChartPanel pc = new ChartPanel(ChartFactory.createPieChart( "Note supperieur a la moyenne", data, false/*legend?*/,true/*tooltips?*/, false/*URLs?*/));
-		jFreeChartDroiteHaut.add(pc);
-
-		int inf1=0;
-		int sup1=0;
-		for(int i=0;i<donnees.length;i++){
-			if( (Integer)donnees[i][1] <= 10){
-				inf1+=(Integer)donnees[i][1]*(Integer)donnees[i][2];
-			}else{
-				sup1+=(Integer)donnees[i][1]*(Integer)donnees[i][2];
-			}
-		}
-
-		DefaultPieDataset data1 = new DefaultPieDataset();
-		data1.setValue("Note < 10",(double)inf1);
-		data1.setValue("Note > 10",(double)sup1);
-		ChartPanel pc1 = new ChartPanel(ChartFactory.createPieChart( "Note supperieur a la moyenne avec coeff", data1, false/*legend?*/,true/*tooltips?*/, false/*URLs?*/));
-		jFreeChartDroiteHaut.add(pc1);
-
-
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		String s="Profit1";
-		for(int i=0;i<donnees.length;i++){
-			s = "Profit" + (1+i);
-			dataset.setValue((Integer)donnees[i][1], s , (String)donnees[i][0]);
-		}
-		JFreeChart chart = ChartFactory.createBarChart3D( "Graphique des notes",
-				"", "Note sur 20", dataset, PlotOrientation.VERTICAL, false, false, false );
-
-		ChartPanel pc3 = new ChartPanel(chart);
-		jFreeChartDroiteBas.add(pc3);
-
-		return jFreeChartDroite;
-	}
+		ChartPanel pc = new ChartPanel(ChartFactory.createPieChart( "Note supperieur a la moyenne", data, false/*legend?,truetooltips?, falseURLs?*///));
+//		jFreeChartDroiteHaut.add(pc);
+//
+//		int inf1=0;
+//		int sup1=0;
+//		for(int i=0;i<donnees.length;i++){
+//			if( (Integer)donnees[i][1] <= 10){
+//				inf1+=(Integer)donnees[i][1]*(Integer)donnees[i][2];
+//			}else{
+//				sup1+=(Integer)donnees[i][1]*(Integer)donnees[i][2];
+//			}
+//		}
+//
+//		DefaultPieDataset data1 = new DefaultPieDataset();
+//		data1.setValue("Note < 10",(double)inf1);
+//		data1.setValue("Note > 10",(double)sup1);
+////		ChartPanel pc1 = new ChartPanel(ChartFactory.createPieChart( "Note supperieur a la moyenne avec coeff", data1, false/*legend?*/,true/*tooltips?*/, false/*URLs?*/));
+//		jFreeChartDroiteHaut.add(pc1);
+//
+//
+//		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+//		String s="Profit1";
+//		for(int i=0;i<donnees.length;i++){
+//			s = "Profit" + (1+i);
+//			dataset.setValue((Integer)donnees[i][1], s , (String)donnees[i][0]);
+//		}
+//		JFreeChart chart = ChartFactory.createBarChart3D( "Graphique des notes",
+//				"", "Note sur 20", dataset, PlotOrientation.VERTICAL, false, false, false );
+//
+//		ChartPanel pc3 = new ChartPanel(chart);
+//		jFreeChartDroiteBas.add(pc3);
+//
+//		return jFreeChartDroite;
+//	}*/
 
 
 	/**
