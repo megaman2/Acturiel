@@ -383,6 +383,11 @@ public class Fenetre extends JFrame implements ActionListener{
 		tableau.getTableHeader().setReorderingAllowed(false);    // interdit le changement d'ordre des colones
 		affichage.add(tableau.getTableHeader(), BorderLayout.NORTH);
 		affichage.add(pane, BorderLayout.CENTER);
+		tableau.setDefaultRenderer(Object.class, new jTableRender());
+
+		//getTableCellRendererComponent(tableau,entetes,true, true,entetes.length, donnees[0].length);
+		
+		//setDefaultRenderer(Object.class, new jTableRender());
 		centre.add(affichage, BorderLayout.CENTER);
 		affichage.revalidate();
 

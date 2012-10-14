@@ -140,25 +140,25 @@ public class Tree extends JTree implements ActionListener{
 			for( int i=1; i< entetes.length ; i++){
 				entetes[i] = fenetre.getListMortality().get(i-1).getNom();
 			}
-			System.out.println("coucou");
 			String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][fenetre.getListMortality().size()+1];
 			for(int j=0;  j < donnees.length ; j++){
 				donnees[j][0]=j+"";
 			}
-			System.out.println("coucou je suis la ");
-
 			for( int i=0; i < donnees.length ; i++){
-				System.out.println("on va faire i fois "+donnees.length+" et pour j"+donnees[i].length);
 				for(int j=0;  j < donnees[i].length -1 ; j++){
-					System.out.println("i="+i+ "  j="+j);
 					donnees[i][j+1] = fenetre.getListMortality().get(j).getValeur()[i]+"";
 				}
 			}
 			fenetre.createurPanelJTable(entetes, donnees);
 
 		}else if(node.toString().equals("GenericCalc")){
-			String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx","dx"};
-			String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][4];
+			int amount =1000;
+			int age=30;
+			int term = 25;
+			int technicalRate=2;
+			int payment=10;
+			String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx","dx", " ","term","tpx","v^t","tEx"};
+			String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][12];
 			int indice = fenetre.getChoixTable().getSelectedIndex();
 			System.out.println("la taille est"+fenetre.getListMortality().get(0).getValeur().length+" "+donnees[0].length);
 			for( int i=0; i < donnees.length ; i++){
@@ -174,11 +174,61 @@ public class Tree extends JTree implements ActionListener{
 				donnees[i][3]=Calcul.dx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(0).getValeur()[i+1])+"";
 			}
 
+			// pour term
+			for( int i=0; i < 10; i++){
+				//term
+				donnees[i][5]=i+"";
+				//tpx
+				donnees[i][6]=Calcul.npx(age,Integer.parseInt(donnees[i][5]),fenetre.getListMortality().get(indice).getValeur())+"";
+				//v^t
+				donnees[i][7]=Calcul.techDF(Integer.parseInt(donnees[i][5]),technicalRate)+"";
+				//tEx
+				donnees[i][8]=Double.parseDouble(donnees[i][6])*Double.parseDouble(donnees[i][7])+"";
+
+			}
+
+			int offsetH=5;
+			int offsetV=15;
+			// prenser a ajouter 3 espaces pour la coloration !
+			donnees[offsetV][offsetH]="npx   ";
+			donnees[offsetV][offsetH+1]=Calcul.npx(age, term ,fenetre.getListMortality().get(indice).getValeur())+"";
+
+			donnees[offsetV+1][offsetH]="v^n   ";
+			donnees[offsetV+1][offsetH+1]=Calcul.techDF(term,technicalRate)+"";
+
+			donnees[offsetV+2][offsetH]="nEx   ";
+			donnees[offsetV+2][offsetH+1]= Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
+
+			donnees[offsetV+4][offsetH]="a..m:x   ";
+			double somme=0.0;
+			for( int i=0; i < 10; i++){
+				somme+=Double.parseDouble(donnees[i][8]);
+			}
+			donnees[offsetV+4][offsetH+1]=somme +"";
+			
+			//Single Premiun 
+			donnees[offsetV+6][offsetH]="Single Premiun   ";
+			donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
+			donnees[offsetV+7][offsetH+1]=0.0+""; //TODO
+			if(  (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 > -1 ))){
+				donnees[offsetV+7][offsetH+2]="OK";
+			}else{
+				donnees[offsetV+7][offsetH+2]="ERREUR";
+			}
+			// Annual Premium
+			donnees[offsetV+9][offsetH]="Annual Premium   ";
+			donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
+			donnees[offsetV+10][offsetH+1]=(amount*(Double.parseDouble(donnees[offsetV+2][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])))+"";
+			if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
+				donnees[offsetV+10][offsetH+2]="OK";
+			}else{
+				donnees[offsetV+10][offsetH+2]="ERREUR";
+			}
 			fenetre.createurPanelJTable(entetes, donnees);
 
 		}
 	}
-	
-	
-	
+
+
+
 }

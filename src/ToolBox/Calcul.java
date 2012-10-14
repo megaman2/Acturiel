@@ -14,18 +14,18 @@ public abstract class Calcul {
 	public static int lx(int[] tab, int a){
 		return tab[a];	
 	}
+	
 	public static double n_1qx( int x, int n, int[] tab){
 		return (lx(tab, x+n)-lx(tab,x+n+1)/(lx(tab,x)*1.0));
-
 	}
 
-	public static double npx(int amount, int age, int[] tab){
-		return lx(tab,amount+age)/((lx(tab,age)*1.0));
+	public static double npx(int age, int term, int[] tab){
+		return lx(tab,term+age)/((lx(tab,age)*1.0));
 	}
 
 	// pour v^n
 	public static double techDF(int term, int techincalRate){
-		return 1 / (Math.pow((1 + techincalRate) , term));
+		return 1 / (Math.pow((1 + techincalRate/100.0) , term));
 	}
 
 
