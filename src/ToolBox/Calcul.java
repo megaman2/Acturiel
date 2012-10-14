@@ -26,28 +26,31 @@ public abstract class Calcul {
 	}
 
 	// pour v^n
-	public static double techDF(int term, int techincalRate){
-		return 1 / (Math.pow((1 + techincalRate/100.0) , term));
+	public static double techDF(int term, double techRate){
+		return 1 / (Math.pow((1 + techRate/100.0) , term));
 	}
 
 
 	// nEx faire v^n * npx
-	public static double nEx(int term, int techincalRate,int amount, int age, int[] tab){
-		return techDF(term, techincalRate)*npx(amount, age, tab);
+	public static double nEx(int term, double techRate,int amount, int age, int[] tab){
+		return techDF(term, techRate)*npx(amount, age, tab);
 	}
 
 
-	public static double SinglePremiumPE(int x ,int n ,double techRate,double benefit){
-		return 1.0; // nEx(x, n, techRate)* benefit;
+	public static double SinglePremiumPE(int x ,int n ,double techRate,double benefit, int amount, int age, int[] tab){
+		return nEx(x, techRate, amount, age, tab)*techDF(n, techRate);
 	}
 
 
-	public static double AnnualPremium(double singlePremium, int x, int n, double techRate){
-		return singlePremium / annuityFactor(x, n, techRate);
+	public static double AnnualPremium(double singlePremium, int x, int n, double techRate, int amount, int age, int[] tab){
+		return singlePremium / annuityFactor(x, n, techRate, amount, age, tab);
 	}
 
-	private static double annuityFactor(int x, int n, double techRate) {
-		// TODO Auto-generated method stub
-		return 0;
+	private static double annuityFactor(int x, int m, double techRate, int amount, int age, int[] tab) {
+		double somme = 0;
+		for (int h = 0; h < m; h++) {
+			somme += nEx(x, techRate, amount, h, tab);
+		}
+		return somme;
 	}
 }
