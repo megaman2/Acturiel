@@ -16,7 +16,9 @@ public abstract class Calcul {
 	}
 	
 	public static double n_1qx( int x, int n, int[] tab){
-		return (lx(tab, x+n)-lx(tab,x+n+1)/(lx(tab,x)*1.0));
+		System.out.println("je fais "+ lx(tab, x+n)+ " - "+lx(tab,x+n+1) +"/ "+lx(tab,x));
+		System.out.println();
+		return ((lx(tab, x+n)-lx(tab,x+n+1))/(lx(tab,x)*1.0));
 	}
 
 	public static double npx(int age, int term, int[] tab){

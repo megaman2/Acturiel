@@ -235,7 +235,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		titreAge.setVisible(true);
 		boutonsBas.add(titreAge);
 		
-		age= new JTextField();
+		age= new JTextField("30");
 		boutonsBas.add(age);
 		age.setVisible(true);
 
@@ -243,7 +243,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		titrePayment.setVisible(true);
 		boutonsBas.add(titrePayment);
 
-		payment = new JTextField();
+		payment = new JTextField("10");
 		payment.setVisible(true);
 		boutonsBas.add(payment);
 		
@@ -251,7 +251,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		titreTerm.setVisible(true);
 		boutonsBas.add(titreTerm);
 		
-		term = new JTextField();
+		term = new JTextField("25");
 		term.setVisible(true);
 		boutonsBas.add(term);
 		
@@ -259,15 +259,19 @@ public class Fenetre extends JFrame implements ActionListener{
 		titreTechnicalRate=new  JLabel("Technical Rate ");
 		titreTechnicalRate.setVisible(true);
 		boutonsBas.add(titreTechnicalRate);
-		technicalRate= new JTextField();
+		
+		technicalRate= new JTextField("2");
 		technicalRate.setVisible(true);
 		boutonsBas.add(technicalRate);
+		
 		titreAmount=new  JLabel("Amount ");
 		titreAmount.setVisible(true);
 		boutonsBas.add(titreAmount);
-		amount= new JTextField();
+		
+		amount= new JTextField("1000");
 		amount.setVisible(true);
 		boutonsBas.add(amount);
+		
 		titreChoixContrat= new JLabel("Choix de Contract ");
 		titreChoixContrat.setVisible(true);
 		boutonsBas.add(titreChoixContrat);
@@ -841,6 +845,46 @@ public class Fenetre extends JFrame implements ActionListener{
 
 	public void setChoixTable(JComboBox choixTable) {
 		this.choixTable = choixTable;
+	}
+
+	public JTextField getAge() {
+		return age;
+	}
+
+	public void setAge(JTextField age) {
+		this.age = age;
+	}
+
+	public JTextField getTerm() {
+		return term;
+	}
+
+	public void setTerm(JTextField term) {
+		this.term = term;
+	}
+
+	public JTextField getTechnicalRate() {
+		return technicalRate;
+	}
+
+	public void setTechnicalRate(JTextField technicalRate) {
+		this.technicalRate = technicalRate;
+	}
+
+	public JTextField getAmount() {
+		return amount;
+	}
+
+	public void setAmount(JTextField amount) {
+		this.amount = amount;
+	}
+
+	public JTextField getPayment() {
+		return payment;
+	}
+
+	public void setPayment(JTextField payment) {
+		this.payment = payment;
 	}
 
 
