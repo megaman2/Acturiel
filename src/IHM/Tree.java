@@ -205,8 +205,8 @@ public class Tree extends JTree implements ActionListener{
 		//Single Premiun 							int term ,int n ,int techRate, int amount, int age,int[] tab
 		donnees[offsetV][offsetH]="Single Premiun   ";
 		donnees[offsetV][offsetH+1]=Calcul.SinglePremiumPE(term, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+"";
-				System.out.println("SinglePremium vaut: "+donnees[offsetV][offsetH+1]);
-				
+		System.out.println("SinglePremium vaut: "+donnees[offsetV][offsetH+1]);
+
 		// Annual Premium
 		donnees[offsetV+3][offsetH]="Annual Premium   ";
 		donnees[offsetV+3][offsetH+1]=""; //TODO Paraita
@@ -224,7 +224,7 @@ public class Tree extends JTree implements ActionListener{
 		for( int i=0; i < donnees.length ; i++){
 			donnees[i][1]=fenetre.getListMortality().get(indice).getValeur()[i]+"";
 		}
-	
+
 		for( int i=0; i < donnees.length -1; i++){
 			donnees[i][2]=Calcul.dx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(indice).getValeur()[i+1])+"";
 		}
@@ -351,18 +351,18 @@ public class Tree extends JTree implements ActionListener{
 		}
 
 		// pour term
-		for( int i=0; i < 16; i++){
+		for( int i=0; i < 15; i++){
 			//term
 			donnees[i][10]=i+"";
 			//tpx
 			donnees[i][11]=Calcul.npx(age,Integer.parseInt(donnees[i][10]),fenetre.getListMortality().get(indice).getValeur())+"";
 			//v^t
 			donnees[i][12]=Calcul.techDF(Integer.parseInt(donnees[i][10]),technicalRate)+"";
-			//tEx
+			//nEx
 			donnees[i][13]=Double.parseDouble(donnees[i][11])*Double.parseDouble(donnees[i][12])+"";
 
 		}
-
+		double ax=0.0;
 		// pour term 2
 		for( int i=0; i < fenetre.getListMortality().get(indice).getValeur().length - age -1 ; i++){
 			//term
@@ -373,41 +373,32 @@ public class Tree extends JTree implements ActionListener{
 			donnees[i][7]=Calcul.n_1qx(age, i, fenetre.getListMortality().get(indice).getValeur())+"";
 			//h-1/1 A x
 			donnees[i][8]=Double.parseDouble(donnees[i][6])*Double.parseDouble(donnees[i][7])+"";
-
+			ax+=Double.parseDouble(donnees[i][6])*Double.parseDouble(donnees[i][7]);
 		}
 
 		int offsetH=10;
 		int offsetV=19;
 		donnees[offsetV+4][offsetH]="a..m:x   ";
 		double somme=0.0;
-		for( int i=0; i < fenetre.getListMortality().get(indice).getValeur().length - age -1 ; i++){
-			somme+=Double.parseDouble(donnees[i][8]);
+		for( int i=0; i < 15 ; i++){
+			somme+=Double.parseDouble(donnees[i][13]);
 		}
 		donnees[offsetV+4][offsetH+1]=somme +"";
+		//AX
+		donnees[offsetV+12][offsetH]="AX   ";
+		donnees[offsetV+12][offsetH+1]=ax+"";
 
-//		//Single Premiun 
-//		donnees[offsetV+6][offsetH]="Single Premiun   ";
-//		donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
-//		donnees[offsetV+7][offsetH+1]=0.0+""; //TODO
-//		if(  (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 > -1 ))){
-//			donnees[offsetV+7][offsetH+2]="OK";
-//		}else{
-//			donnees[offsetV+7][offsetH+2]="ERREUR";
-//		}
-//		// Annual Premium
-//		donnees[offsetV+9][offsetH]="Annual Premium   ";
-//		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
-//		donnees[offsetV+10][offsetH+1]=(amount*(Double.parseDouble(donnees[offsetV+2][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])))+"";
-//		if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
-//			donnees[offsetV+10][offsetH+2]="OK";
-//		}else{
-//			donnees[offsetV+10][offsetH+2]="ERREUR";
-//		}
-//		
-//		donnees[offsetV+12][offsetH]="AX   ";
-//		donnees[offsetV+12][offsetH+1]="AX   ";
+		//Single Premiun 
+		donnees[offsetV+6][offsetH]="Single Premiun   ";
+		donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV+12][offsetH+1])+"";
 
-		
+
+		// Annual Premium
+		donnees[offsetV+9][offsetH]="Annual Premium   ";
+		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
+
+
+
 		fenetre.createurPanelJTable(entetes, donnees);
 	}
 
@@ -466,23 +457,14 @@ public class Tree extends JTree implements ActionListener{
 		int offsetH=10;
 		int offsetV=19;
 		// prenser a ajouter 3 espaces pour la coloration !
-		donnees[offsetV][offsetH]="npx   ";
-		donnees[offsetV][offsetH+1]=Calcul.npx(age, term ,fenetre.getListMortality().get(indice).getValeur())+"";
-
-		donnees[offsetV+1][offsetH]="v^n   ";
-		donnees[offsetV+1][offsetH+1]=Calcul.techDF(term,technicalRate)+"";
-
-		donnees[offsetV+2][offsetH]="nEx   ";
-		donnees[offsetV+2][offsetH+1]= Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
-
 		donnees[offsetV+4][offsetH]="a..m:x   ";
 		double somme=0.0;
 		for( int i=0; i < 10; i++){
-			somme+=Double.parseDouble(donnees[i][8]);
+			somme+=Double.parseDouble(donnees[i][13]);
 		}
 		donnees[offsetV+4][offsetH+1]=somme +"";
 		donnees[offsetV+5][offsetH+1]=somme +"";
-		if(false){
+		if((Double.parseDouble(donnees[offsetV+4][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+5][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+4][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+5][offsetH+1])*100000 > -1 ))){
 			donnees[offsetV+5][offsetH+3]="OK";
 		}else{
 			donnees[offsetV+5][offsetH+3]="ERREUR";
@@ -492,7 +474,7 @@ public class Tree extends JTree implements ActionListener{
 		donnees[offsetV+6][offsetH]="Single Premiun   ";
 		donnees[offsetV+6][offsetH+1]=nAx*amount+"";
 		donnees[offsetV+7][offsetH+1]=Calcul.nAx(age, term, technicalRate, fenetre.getListMortality().get(indice).getValeur())*amount+""; //TODO
-		donnees[offsetV+7][offsetH+2]=0.0+""; //TODO
+		donnees[offsetV+7][offsetH+2]=Calcul.SinglePremiumTA(age, term, technicalRate, amount, fenetre.getListMortality().get(indice).getValeur())+""; //TODO
 
 		if( false){
 			donnees[offsetV+7][offsetH+3]="OK";
@@ -502,15 +484,15 @@ public class Tree extends JTree implements ActionListener{
 		// Annual Premium
 		donnees[offsetV+9][offsetH]="Annual Premium   ";
 		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
-		donnees[offsetV+10][offsetH+1]=amount+"";
-		donnees[offsetV+10][offsetH+2]=amount+"";
+		donnees[offsetV+10][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
+		donnees[offsetV+10][offsetH+2]=""; //TODO Paraita
 
 		if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
 			donnees[offsetV+10][offsetH+3]="OK";
 		}else{
 			donnees[offsetV+10][offsetH+3]="ERREUR";
 		}
-		
+
 		donnees[offsetV+12][offsetH]="nAX   ";
 		donnees[offsetV+12][offsetH+1]=nAx+"";
 		donnees[offsetV+13][offsetH+1]=Calcul.nAx(age, term, technicalRate ,fenetre.getListMortality().get(indice).getValeur())+"";
@@ -530,7 +512,7 @@ public class Tree extends JTree implements ActionListener{
 		int payment=Integer.parseInt(fenetre.getPayment().getText());
 
 
-		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx","dx", " ","term","tpx","v^t","tEx", "  ","term","v^h","h-1/1 q x","h-1/ A x" };
+		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx","dx",  "  ","term","v^h","h-1/1 q x","h-1/ A x"," ","term","tpx","v^t","tEx" };
 		String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][17];
 		int indice = fenetre.getChoixTable().getSelectedIndex();
 		System.out.println("la taille est"+fenetre.getListMortality().get(0).getValeur().length+" "+donnees[0].length);
@@ -561,18 +543,17 @@ public class Tree extends JTree implements ActionListener{
 		}
 
 		// pour term 2
+		
 		for( int i=0; i < 15; i++){
 			//term
 			donnees[i][5]=i+1+"";
 			//v^h
-			donnees[i][6]=100+"";
+			donnees[i][6]=Calcul.techDF(Integer.parseInt(donnees[i][5]),technicalRate)+"";
 			//h-1/1 q x 
-			donnees[i][7]=100+"";
+			donnees[i][7]=(Calcul.lx(fenetre.getListMortality().get(indice).getValeur(), age+Integer.parseInt(donnees[i][5])-1)-Calcul.lx(fenetre.getListMortality().get(indice).getValeur(), age+Integer.parseInt(donnees[i][5])))/(Calcul.lx(fenetre.getListMortality().get(indice).getValeur(),age)*1.0)+"";
 			//h-1/1 A x
-			donnees[i][8]=100+"";
-
+			donnees[i][8]=Double.parseDouble(donnees[i][6])*Double.parseDouble(donnees[i][7])+"";
 		}
-
 		int offsetH=10;
 		int offsetV=19;
 		// prenser a ajouter 3 espaces pour la coloration !
@@ -610,7 +591,7 @@ public class Tree extends JTree implements ActionListener{
 		}else{
 			donnees[offsetV+10][offsetH+2]="ERREUR";
 		}
-		
+
 		donnees[offsetV+12][offsetH]="nAx   ";
 		donnees[offsetV+12][offsetH+1]="1000";
 		donnees[offsetV+13][offsetH+1]="1000";

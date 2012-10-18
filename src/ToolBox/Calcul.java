@@ -71,7 +71,7 @@ public abstract class Calcul {
 		return SinglePremiumTA(age, term, techRate, benefit,tab)+SinglePremiumPE(age, term, techRate, benefit,tab);
 	}
 
-	private static double SinglePremiumTA(int age, int term, int techRate, int benefit, int[] tab) {
+	public static double SinglePremiumTA(int age, int term, int techRate, int benefit, int[] tab) {
 		return nAx(age, term, techRate,tab)*benefit;
 	}	
 
