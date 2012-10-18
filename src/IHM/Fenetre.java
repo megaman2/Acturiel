@@ -57,7 +57,7 @@ public class Fenetre extends JFrame implements ActionListener{
 	private static final long serialVersionUID = -8466580375192983430L;
 
 	// fenetre
-	private String windowsName = "BLAP_40";    // nom
+	private String windowsName = "Projet Calcul Acturiel";    // nom
 	private int widthMinFenetre = 800;        // largeur minimale
 	private int heightMinFenetre = 600;        // hauteur minimale
 	// panels

@@ -148,6 +148,8 @@ public class Tree extends JTree implements ActionListener{
 			createurEndowmentPremium();
 		}else if(node.toString().equals("Generic Contract")){
 			createurGenericContract();
+		}else if(node.toString().equals("Stress Test")){
+			createurStressTest();
 		}
 	}
 
@@ -245,6 +247,56 @@ public class Tree extends JTree implements ActionListener{
 	}
 
 	public void createurStressTest(){
+		int amount =Integer.parseInt(fenetre.getAmount().getText());
+		int age=Integer.parseInt(fenetre.getAge().getText());
+		int term = Integer.parseInt(fenetre.getTerm().getText());
+		int technicalRate=Integer.parseInt(fenetre.getTechnicalRate().getText());
+		int payment=Integer.parseInt(fenetre.getPayment().getText());
+		int discount=25;
+		
+		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx", "qx stressed", "lx stressed","qx stressed", "lx stressed", "check 1", "check 2"};
+		String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][10];
+		int indice = fenetre.getChoixTable().getSelectedIndex();
+		for( int i=0; i < donnees.length ; i++){
+			donnees[i][0]=i+"";
+		}
+		for( int i=0; i < donnees.length ; i++){
+			donnees[i][1]=fenetre.getListMortality().get(indice).getValeur()[i]+"";
+		}
+
+		for( int i=0; i < donnees.length -1; i++){
+			donnees[i][2]=Calcul.qx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(indice).getValeur()[i+1])+"";
+			
+		}
+		for( int i=0; i < donnees.length -1 ; i++){
+			donnees[i][3]=(Double.parseDouble(donnees[i][2]))*(1-discount/100.0)+"";
+			if(Double.parseDouble(donnees[i][2]) == 1 ){
+				donnees[i][3]=1+"";
+			}
+		}
+		
+		donnees[0][4]=100000+"";
+		for( int i=1; i < donnees.length -1; i++){
+			donnees[i][4]=Double.parseDouble(donnees[i-1][4])*(1-Double.parseDouble(donnees[i-1][3]))+"";
+		}
+		for( int i=0; i < donnees.length -2 ; i++){
+			donnees[i][5]=1-Double.parseDouble(donnees[i+1][4])/Double.parseDouble(donnees[i][4])+"";
+			if(Double.parseDouble(donnees[i][2]) == 1 ){
+				donnees[i][5]=1+"";
+			}
+		}
+		
+		// test
+		int i=0; 
+		do{
+			if( (Double.parseDouble(donnees[i][3])*100000 - Double.parseDouble(donnees[i][5])*100000 < 1 && (Double.parseDouble(donnees[i][3])*100000 - Double.parseDouble(donnees[i][5])*100000 > -1 ))){
+				donnees[i][7]="OK";
+			}else{
+				donnees[i][7]="ERREUR";
+			}
+			i++;
+		}while(Double.parseDouble(donnees[i-1][3]) != 1 );
+		fenetre.createurPanelJTable(entetes, donnees);
 
 	}
 
