@@ -190,10 +190,10 @@ public class Tree extends JTree implements ActionListener{
 			donnees[i][1]=fenetre.getListMortality().get(indice).getValeur()[i]+"";
 		}
 		for( int i=0; i < donnees.length -1 ; i++){
-			donnees[i][2]=Calcul.qx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(0).getValeur()[i+1])+"";
+			donnees[i][2]=Calcul.qx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(indice).getValeur()[i+1])+"";
 		}
 		for( int i=0; i < donnees.length -1; i++){
-			donnees[i][3]=Calcul.dx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(0).getValeur()[i+1])+"";
+			donnees[i][3]=Calcul.dx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(indice).getValeur()[i+1])+"";
 		}
 
 
@@ -202,12 +202,14 @@ public class Tree extends JTree implements ActionListener{
 		// prenser a ajouter 3 espaces pour la coloration !
 
 
-		//Single Premiun 
+		//Single Premiun 							int term ,int n ,int techRate, int amount, int age,int[] tab
 		donnees[offsetV][offsetH]="Single Premiun   ";
-		donnees[offsetV][offsetH+1]=amount+""; //TODO
+		donnees[offsetV][offsetH+1]=Calcul.SinglePremiumPE(term, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+"";
+				System.out.println("SinglePremium vaut: "+donnees[offsetV][offsetH+1]);
+				
 		// Annual Premium
 		donnees[offsetV+3][offsetH]="Annual Premium   ";
-		donnees[offsetV+3][offsetH+1]=amount+""; //TODO
+		donnees[offsetV+3][offsetH+1]=""; //TODO Paraita
 		fenetre.createurPanelJTable(entetes, donnees);
 	}
 
@@ -306,7 +308,7 @@ public class Tree extends JTree implements ActionListener{
 		//Single Premiun 
 		donnees[offsetV+6][offsetH]="Single Premiun   ";
 		donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
-		donnees[offsetV+7][offsetH+1]=0.0+""; //TODO
+		donnees[offsetV+7][offsetH+1]=Calcul.SinglePremiumPE(term, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+"";
 		if(  (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 > -1 ))){
 			donnees[offsetV+7][offsetH+2]="OK";
 		}else{
@@ -327,7 +329,6 @@ public class Tree extends JTree implements ActionListener{
 	public void createurWholeLifePremium(){
 		int amount =Integer.parseInt(fenetre.getAmount().getText());
 		int age=Integer.parseInt(fenetre.getAge().getText());
-		int term = Integer.parseInt(fenetre.getTerm().getText());
 		int technicalRate=Integer.parseInt(fenetre.getTechnicalRate().getText());
 		int payment=Integer.parseInt(fenetre.getPayment().getText());
 
@@ -363,58 +364,48 @@ public class Tree extends JTree implements ActionListener{
 		}
 
 		// pour term 2
-		for( int i=0; i < 61; i++){
+		for( int i=0; i < fenetre.getListMortality().get(indice).getValeur().length - age -1 ; i++){
 			//term
 			donnees[i][5]=i+1+"";
 			//v^h
-			donnees[i][6]=100+"";
+			donnees[i][6]=Calcul.techDF(Integer.parseInt(donnees[i][5]), technicalRate)+"";
 			//h-1/1 q x 
-			donnees[i][7]=100+"";
+			donnees[i][7]=Calcul.n_1qx(age, i, fenetre.getListMortality().get(indice).getValeur())+"";
 			//h-1/1 A x
-			donnees[i][8]=100+"";
+			donnees[i][8]=Double.parseDouble(donnees[i][6])*Double.parseDouble(donnees[i][7])+"";
 
 		}
 
 		int offsetH=10;
 		int offsetV=19;
-		// prenser a ajouter 3 espaces pour la coloration !
-		donnees[offsetV][offsetH]="npx   ";
-		donnees[offsetV][offsetH+1]=Calcul.npx(age, term ,fenetre.getListMortality().get(indice).getValeur())+"";
-
-		donnees[offsetV+1][offsetH]="v^n   ";
-		donnees[offsetV+1][offsetH+1]=Calcul.techDF(term,technicalRate)+"";
-
-		donnees[offsetV+2][offsetH]="nEx   ";
-		donnees[offsetV+2][offsetH+1]= Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
-
 		donnees[offsetV+4][offsetH]="a..m:x   ";
 		double somme=0.0;
-		for( int i=0; i < 10; i++){
+		for( int i=0; i < fenetre.getListMortality().get(indice).getValeur().length - age -1 ; i++){
 			somme+=Double.parseDouble(donnees[i][8]);
 		}
 		donnees[offsetV+4][offsetH+1]=somme +"";
 
-		//Single Premiun 
-		donnees[offsetV+6][offsetH]="Single Premiun   ";
-		donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
-		donnees[offsetV+7][offsetH+1]=0.0+""; //TODO
-		if(  (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 > -1 ))){
-			donnees[offsetV+7][offsetH+2]="OK";
-		}else{
-			donnees[offsetV+7][offsetH+2]="ERREUR";
-		}
-		// Annual Premium
-		donnees[offsetV+9][offsetH]="Annual Premium   ";
-		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
-		donnees[offsetV+10][offsetH+1]=(amount*(Double.parseDouble(donnees[offsetV+2][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])))+"";
-		if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
-			donnees[offsetV+10][offsetH+2]="OK";
-		}else{
-			donnees[offsetV+10][offsetH+2]="ERREUR";
-		}
-		
-		donnees[offsetV+12][offsetH]="AX   ";
-		donnees[offsetV+12][offsetH+1]="AX   ";
+//		//Single Premiun 
+//		donnees[offsetV+6][offsetH]="Single Premiun   ";
+//		donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
+//		donnees[offsetV+7][offsetH+1]=0.0+""; //TODO
+//		if(  (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 > -1 ))){
+//			donnees[offsetV+7][offsetH+2]="OK";
+//		}else{
+//			donnees[offsetV+7][offsetH+2]="ERREUR";
+//		}
+//		// Annual Premium
+//		donnees[offsetV+9][offsetH]="Annual Premium   ";
+//		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
+//		donnees[offsetV+10][offsetH+1]=(amount*(Double.parseDouble(donnees[offsetV+2][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])))+"";
+//		if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
+//			donnees[offsetV+10][offsetH+2]="OK";
+//		}else{
+//			donnees[offsetV+10][offsetH+2]="ERREUR";
+//		}
+//		
+//		donnees[offsetV+12][offsetH]="AX   ";
+//		donnees[offsetV+12][offsetH+1]="AX   ";
 
 		
 		fenetre.createurPanelJTable(entetes, donnees);
@@ -428,7 +419,7 @@ public class Tree extends JTree implements ActionListener{
 		int payment=Integer.parseInt(fenetre.getPayment().getText());
 
 
-		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx","dx", " ","term","tpx","v^t","tEx", "  ","term","v^h","h-1/1 q x","h-1/ A x" };
+		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx","dx",  "  ","term","v^h","h-1/1 q x","h-1/ A x"," ","term","tpx","v^t","tEx", };
 		String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][17];
 		int indice = fenetre.getChoixTable().getSelectedIndex();
 		System.out.println("la taille est"+fenetre.getListMortality().get(0).getValeur().length+" "+donnees[0].length);
@@ -445,8 +436,8 @@ public class Tree extends JTree implements ActionListener{
 			donnees[i][3]=Calcul.dx(fenetre.getListMortality().get(indice).getValeur()[i],fenetre.getListMortality().get(indice).getValeur()[i+1])+"";
 		}
 
-		// pour term
-		for( int i=0; i < 16; i++){
+		// pour term  2
+		for( int i=0; i < 10; i++){
 			//term
 			donnees[i][10]=i+"";
 			//tpx
@@ -458,17 +449,18 @@ public class Tree extends JTree implements ActionListener{
 
 		}
 
-		// pour term 2
+		double nAx=0.0;
+		// pour term 1
 		for( int i=0; i < 20; i++){
 			//term
 			donnees[i][5]=i+1+"";
 			//v^h
-			donnees[i][6]=100+"";
+			donnees[i][6]=Calcul.techDF(Integer.parseInt(donnees[i][5]),technicalRate)+"";
 			//h-1/1 q x 
-			donnees[i][7]=100+"";
+			donnees[i][7]=(Calcul.lx(fenetre.getListMortality().get(indice).getValeur(), age+Integer.parseInt(donnees[i][5])-1)-Calcul.lx(fenetre.getListMortality().get(indice).getValeur(), age+Integer.parseInt(donnees[i][5])))/(Calcul.lx(fenetre.getListMortality().get(indice).getValeur(),age)*1.0)+"";
 			//h-1/1 A x
-			donnees[i][8]=100+"";
-
+			donnees[i][8]=Double.parseDouble(donnees[i][6])*Double.parseDouble(donnees[i][7])+"";
+			nAx+=Double.parseDouble(donnees[i][6])*Double.parseDouble(donnees[i][7]);
 		}
 
 		int offsetH=10;
@@ -498,8 +490,8 @@ public class Tree extends JTree implements ActionListener{
 		offsetV++;
 		//Single Premiun 
 		donnees[offsetV+6][offsetH]="Single Premiun   ";
-		donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
-		donnees[offsetV+7][offsetH+1]=0.0+""; //TODO
+		donnees[offsetV+6][offsetH+1]=nAx*amount+"";
+		donnees[offsetV+7][offsetH+1]=Calcul.nAx(age, term, technicalRate, fenetre.getListMortality().get(indice).getValeur())*amount+""; //TODO
 		donnees[offsetV+7][offsetH+2]=0.0+""; //TODO
 
 		if( false){
@@ -520,9 +512,9 @@ public class Tree extends JTree implements ActionListener{
 		}
 		
 		donnees[offsetV+12][offsetH]="nAX   ";
-		donnees[offsetV+12][offsetH+1]="calcul";
-		donnees[offsetV+13][offsetH+1]="calcul";
-		if(false){
+		donnees[offsetV+12][offsetH+1]=nAx+"";
+		donnees[offsetV+13][offsetH+1]=Calcul.nAx(age, term, technicalRate ,fenetre.getListMortality().get(indice).getValeur())+"";
+		if((Double.parseDouble(donnees[offsetV+12][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+13][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+12][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+13][offsetH+1])*100000 > -1 ))){
 			donnees[offsetV+12][offsetH+3]="OK";
 		}else{
 			donnees[offsetV+12][offsetH+3]="ERREUR";

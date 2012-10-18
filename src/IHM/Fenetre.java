@@ -235,7 +235,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		titreAge.setVisible(true);
 		boutonsBas.add(titreAge);
 		
-		age= new JTextField("30");
+		age= new JTextField("20");
 		boutonsBas.add(age);
 		age.setVisible(true);
 
@@ -251,7 +251,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		titreTerm.setVisible(true);
 		boutonsBas.add(titreTerm);
 		
-		term = new JTextField("25");
+		term = new JTextField("20");
 		term.setVisible(true);
 		boutonsBas.add(term);
 		
@@ -260,7 +260,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		titreTechnicalRate.setVisible(true);
 		boutonsBas.add(titreTechnicalRate);
 		
-		technicalRate= new JTextField("2");
+		technicalRate= new JTextField("1");
 		technicalRate.setVisible(true);
 		boutonsBas.add(technicalRate);
 		
@@ -829,19 +829,13 @@ public class Fenetre extends JFrame implements ActionListener{
 		return listMortality;
 	}
 
-
-
 	public void setListMortality(ArrayList<MortalityTable> listMortality) {
 		this.listMortality = listMortality;
 	}
 
-
-
 	public JComboBox getChoixTable() {
 		return choixTable;
 	}
-
-
 
 	public void setChoixTable(JComboBox choixTable) {
 		this.choixTable = choixTable;
