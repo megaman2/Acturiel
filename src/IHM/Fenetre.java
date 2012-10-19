@@ -69,7 +69,8 @@ public class Fenetre extends JFrame implements ActionListener{
 	private JPanel boutonHaut;    // les boutons de navigation en haut
 	private JPanel boutonsBas;    // les boutons de navigation en bas
 	private JPanel affichage;    // partie ou on affichera la jtable ou autre chose
-
+	private JPanel droite;
+	
 	private JPanel gauche;        // panel contenant les panels : arbre et sauvegardeVue
 	private JScrollPane arbre;        // zone gauche-haut
 	//private JPanel sauvegardeVue;// zone gauche-bas
@@ -131,7 +132,9 @@ public class Fenetre extends JFrame implements ActionListener{
 	private JComboBox choixContrat;
 	private JLabel titreChoixContrat;
 
-
+	private JTextField ratio;
+	private JLabel titreRatio;
+	
 
 	// divers
 	private Color colorBg = new Color(230, 230, 255);
@@ -177,7 +180,12 @@ public class Fenetre extends JFrame implements ActionListener{
 		centre = new JPanel();
 		centre.setLayout(new BorderLayout());
 		container.add(centre);
-
+		
+		// Droite pour les graph
+		
+		droite = new JPanel();
+		droite.setLayout(new GridLayout(2, 1));
+		centre.add(droite,BorderLayout.EAST);
 		// CENTER > SOUTH
 		boutonsBas = new JPanel();
 		boutonsBas.setPreferredSize(new Dimension(120, 200));            // partie de basse fixee a 200px
@@ -229,7 +237,7 @@ public class Fenetre extends JFrame implements ActionListener{
 	}
 
 	public void ajoutBoutonsBas(){
-		boutonsBas.setLayout(new GridLayout(6, 2));
+		boutonsBas.setLayout(new GridLayout(7, 2));
 
 		titreAge =new  JLabel("age ");
 		titreAge.setVisible(true);
@@ -239,7 +247,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		boutonsBas.add(age);
 		age.setVisible(true);
 
-		titrePayment = new JLabel("titre Payment ");
+		titrePayment = new JLabel("Payment ");
 		titrePayment.setVisible(true);
 		boutonsBas.add(titrePayment);
 
@@ -271,6 +279,15 @@ public class Fenetre extends JFrame implements ActionListener{
 		amount= new JTextField("1000");
 		amount.setVisible(true);
 		boutonsBas.add(amount);
+		
+		titreRatio=new  JLabel("Ratio ");
+		titreRatio.setVisible(true);
+		boutonsBas.add(titreRatio);
+		
+		
+		ratio = new JTextField("15");
+		ratio.setVisible(true);
+		boutonsBas.add(ratio);
 		
 		titreChoixContrat= new JLabel("Choix de Contract ");
 		titreChoixContrat.setVisible(true);
@@ -821,7 +838,6 @@ public class Fenetre extends JFrame implements ActionListener{
 		tree.setSelectNode(tree.getListNode().get(indice));
 		tree.remplitJTable(tree.getSelectNode());
 
-
 	}
 
 
@@ -879,6 +895,22 @@ public class Fenetre extends JFrame implements ActionListener{
 
 	public void setPayment(JTextField payment) {
 		this.payment = payment;
+	}
+
+	public JTextField getRatio() {
+		return ratio;
+	}
+
+	public void setRatio(JTextField ratio) {
+		this.ratio = ratio;
+	}
+
+	public JPanel getDroite() {
+		return droite;
+	}
+
+	public void setDroite(JPanel droite) {
+		this.droite = droite;
 	}
 
 

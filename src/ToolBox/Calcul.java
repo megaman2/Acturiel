@@ -49,10 +49,14 @@ public abstract class Calcul {
 		return res;
 	}
 
-	public static double annuityFactor(int term ,int n ,int techRate, int amount, int age,int[] tab){
+	public static double annualPremium(int term ,int payments ,int techRate, int amount, int age,int[] tab){
+		return SinglePremiumPE(term, techRate, amount, age, tab)/annuityFactor(term, payments, techRate, amount, age, tab);
+	}
+	
+	public static double annuityFactor(int term ,int payments ,int techRate, int amount, int age,int[] tab){
 		double somme = 0;
-		for (int h = 0; h < n; h++) {
-			somme +=  nEx(term, techRate, age, tab);
+		for (int h = 0; h < payments; h++) {
+			somme +=  nEx(h, techRate, age, tab);
 		}
 		return somme;
 	}
@@ -80,11 +84,7 @@ public abstract class Calcul {
 		return SinglePremiumTA_p(age, term, techRate, benefit, tab )+ SinglePremiumPE_p(age, term, techRate, benefit, tab);
 	}
 
-	public static double AnnualPremium_(int age, int term, int techRate ,int benefit,String contrat ,int[] tab){	
-		double res= SinglePremium_(age, term, techRate, benefit, contrat,tab);
-		return res/AnnuityFactor_(age, term, techRate, tab);
-	}
-
+	
 
 	public static double SinglePremium_(int age, int term, int techRate ,int  benefit,String contract ,int[] tab){
 		if(contract.equals("Term Assurance")){

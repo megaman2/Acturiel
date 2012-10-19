@@ -1,6 +1,7 @@
 package IHM;
 
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,11 +9,20 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import ToolBox.Calcul;
 
@@ -133,7 +143,8 @@ public class Tree extends JTree implements ActionListener{
 
 
 	public void remplitJTable(DefaultMutableTreeNode node){
-
+		fenetre.getDroite().removeAll();
+		fenetre.getDroite().setPreferredSize(new Dimension(0,0));
 		if ( node.toString().equals("Table") ) {
 			createurTable();
 		}else if(node.toString().equals("Generic Calc")){
@@ -252,7 +263,11 @@ public class Tree extends JTree implements ActionListener{
 		int term = Integer.parseInt(fenetre.getTerm().getText());
 		int technicalRate=Integer.parseInt(fenetre.getTechnicalRate().getText());
 		int payment=Integer.parseInt(fenetre.getPayment().getText());
-		int discount=25;
+		int discount=Integer.parseInt(fenetre.getRatio().getText());
+		if(discount < 0 || discount > 100){
+			discount=15;
+			//TODO mettre une alerte
+		}
 		
 		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx", "qx stressed", "lx stressed","qx stressed", "lx stressed", "check 1", "check 2"};
 		String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][10];
@@ -285,17 +300,61 @@ public class Tree extends JTree implements ActionListener{
 				donnees[i][5]=1+"";
 			}
 		}
-		
+		donnees[0][6]=100000+"";
+		for( int i=1; i < donnees.length -1; i++){
+			donnees[i][6]=Double.parseDouble(donnees[i-1][4])*(1-Double.parseDouble(donnees[i-1][3]))+"";
+		}
 		// test
 		int i=0; 
 		do{
-			if( (Double.parseDouble(donnees[i][3])*100000 - Double.parseDouble(donnees[i][5])*100000 < 1 && (Double.parseDouble(donnees[i][3])*100000 - Double.parseDouble(donnees[i][5])*100000 > -1 ))){
+			if( equals(donnees[i][3],donnees[i][5])){
 				donnees[i][7]="OK";
 			}else{
 				donnees[i][7]="ERREUR";
 			}
 			i++;
 		}while(Double.parseDouble(donnees[i-1][3]) != 1 );
+		i=0; 
+		do{
+			if( equals(donnees[i][4],donnees[i][6])){
+				donnees[i][8]="OK";
+			}else{
+				donnees[i][8]="ERREUR";
+			}
+			i++;
+		}while(Double.parseDouble(donnees[i-1][3]) != 1 );
+		
+		XYSeries lx =new XYSeries("lx");
+		XYSeries lxStressed = new XYSeries("lx Stresse");
+		XYSeries qx =new XYSeries("qx");
+		XYSeries qxStressed = new XYSeries("qx Stresse");
+		
+		i=0;
+		while( Integer.parseInt(donnees[i][1]) > 0) {
+			lx.add(Double.parseDouble(donnees[i][1]),i);
+			lxStressed.add(Double.parseDouble(donnees[i][4]),i);
+			qxStressed.add(Double.parseDouble(donnees[i][3]),i);
+			qx.add(Double.parseDouble(donnees[i][2]),i);
+			i++;
+		}
+		
+		
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(lx);
+		dataset.addSeries(lxStressed);
+		JFreeChart graphLx = ChartFactory.createXYLineChart("StressTest Lx", "age", "lx", dataset, PlotOrientation.VERTICAL, true, true, false);
+		ChartPanel chartLx = new ChartPanel(graphLx);
+		
+		
+		XYSeriesCollection dataset1 = new XYSeriesCollection();
+		dataset1.addSeries(qx);
+		dataset1.addSeries(qxStressed);
+		JFreeChart graphQx = ChartFactory.createXYLineChart("StressTest Qx", "age", "qx", dataset1, PlotOrientation.VERTICAL, true, true, false);
+		ChartPanel chartQx = new ChartPanel(graphQx);
+		fenetre.getDroite().setPreferredSize(new Dimension(500, 100));
+
+		fenetre.getDroite().add(chartLx);
+		fenetre.getDroite().add(chartQx);
 		fenetre.createurPanelJTable(entetes, donnees);
 
 	}
@@ -383,7 +442,7 @@ public class Tree extends JTree implements ActionListener{
 		int age=Integer.parseInt(fenetre.getAge().getText());
 		int technicalRate=Integer.parseInt(fenetre.getTechnicalRate().getText());
 		int payment=Integer.parseInt(fenetre.getPayment().getText());
-
+		
 
 		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx","dx", " ","term","tpx","v^t","tEx", "  ","term","v^h","h-1/1 q x","h-1/ A x" };
 		String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][17];
@@ -528,7 +587,7 @@ public class Tree extends JTree implements ActionListener{
 		donnees[offsetV+7][offsetH+1]=Calcul.nAx(age, term, technicalRate, fenetre.getListMortality().get(indice).getValeur())*amount+""; //TODO
 		donnees[offsetV+7][offsetH+2]=Calcul.SinglePremiumTA(age, term, technicalRate, amount, fenetre.getListMortality().get(indice).getValeur())+""; //TODO
 
-		if( false){
+		if(equals(donnees[offsetV+6][offsetH+1],donnees[offsetV+7][offsetH+1]) && equals(donnees[offsetV+6][offsetH+1],donnees[offsetV+7][offsetH+2])){
 			donnees[offsetV+7][offsetH+3]="OK";
 		}else{
 			donnees[offsetV+7][offsetH+3]="ERREUR";
@@ -537,7 +596,7 @@ public class Tree extends JTree implements ActionListener{
 		donnees[offsetV+9][offsetH]="Annual Premium   ";
 		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
 		donnees[offsetV+10][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
-		donnees[offsetV+10][offsetH+2]=""; //TODO Paraita
+		donnees[offsetV+10][offsetH+2]=Calcul.annualPremium(term, payment, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+""; //TODO Paraita
 
 		if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
 			donnees[offsetV+10][offsetH+3]="OK";
@@ -638,8 +697,8 @@ public class Tree extends JTree implements ActionListener{
 		donnees[offsetV+9][offsetH]="Annual Premium   ";
 		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
 		donnees[offsetV+10][offsetH+1]=(amount*(Double.parseDouble(donnees[offsetV+2][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])))+"";
-		if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
-			donnees[offsetV+10][offsetH+2]="OK";
+		if(equals(donnees[offsetV+9][offsetH+1],donnees[offsetV+10][offsetH+1])){
+				donnees[offsetV+10][offsetH+2]="OK";
 		}else{
 			donnees[offsetV+10][offsetH+2]="ERREUR";
 		}
@@ -647,7 +706,7 @@ public class Tree extends JTree implements ActionListener{
 		donnees[offsetV+12][offsetH]="nAx   ";
 		donnees[offsetV+12][offsetH+1]="1000";
 		donnees[offsetV+13][offsetH+1]="1000";
-		if((Double.parseDouble(donnees[offsetV+12][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+13][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+12][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+13][offsetH+1])*100000 > -1 ))){
+		if(equals(donnees[offsetV+12][offsetH+1],donnees[offsetV+13][offsetH+1])){
 			donnees[offsetV+13][offsetH+2]="OK";
 		}else{
 			donnees[offsetV+13][offsetH+2]="ERREUR";
@@ -658,4 +717,14 @@ public class Tree extends JTree implements ActionListener{
 	public void createurTermAssuranceReserve(){
 
 	}
+	
+	
+	public boolean equals(String s1, String s2){
+		double a = Double.parseDouble(s1);
+		double b = Double.parseDouble(s2);		
+		return (a*100000-b*100000 < 1) && (a*100000-b*100000 > -1);	
+	}
+	
+	
+	
 }
