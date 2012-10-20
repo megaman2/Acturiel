@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -264,13 +265,15 @@ public class Tree extends JTree implements ActionListener{
 		int technicalRate=Integer.parseInt(fenetre.getTechnicalRate().getText());
 		int payment=Integer.parseInt(fenetre.getPayment().getText());
 		int discount=Integer.parseInt(fenetre.getRatio().getText());
-		if(discount < 0 || discount > 100){
+		if(discount <= 0 || discount >= 100){
+			fenetre.getRatio().setText("15");
 			discount=15;
-			//TODO mettre une alerte
+			JOptionPane.showMessageDialog(this, "Attention le ration droit etre in entier entre 0 et 100", "avertissement",JOptionPane.WARNING_MESSAGE);
+		
 		}
 		
-		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx", "qx stressed", "lx stressed","qx stressed", "lx stressed", "check 1", "check 2"};
-		String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][10];
+		String[] entetes = {"age",fenetre.getChoixTable().getSelectedItem().toString(),"qx", "qx stressed", "lx stressed","qx stressed", "lx stressed", "check 1", "check 2", "  "};
+		String[][] donnees = new String[fenetre.getListMortality().get(0).getValeur().length][20];
 		int indice = fenetre.getChoixTable().getSelectedIndex();
 		for( int i=0; i < donnees.length ; i++){
 			donnees[i][0]=i+"";
@@ -337,6 +340,8 @@ public class Tree extends JTree implements ActionListener{
 			qx.add(Double.parseDouble(donnees[i][2]),i);
 			i++;
 		}
+		
+		
 		
 		
 		XYSeriesCollection dataset = new XYSeriesCollection();

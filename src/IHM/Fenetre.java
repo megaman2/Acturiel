@@ -735,7 +735,6 @@ public class Fenetre extends JFrame implements ActionListener{
 
 		}else if(arg0.getSource() == remiseAZero){
 			for (int i = 0; i < listMortality.size(); i++) {
-
 				if(listMortality.get(i).getNom().equals(choixTable.getSelectedItem())){
 					listMortality.get(i).maz();
 				}
