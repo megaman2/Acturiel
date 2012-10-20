@@ -219,11 +219,11 @@ public class Tree extends JTree implements ActionListener{
 		//Single Premiun 							int term ,int n ,int techRate, int amount, int age,int[] tab
 		donnees[offsetV][offsetH]="Single Premiun   ";
 		donnees[offsetV][offsetH+1]=Calcul.SinglePremiumPE(term, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+"";
-		System.out.println("SinglePremium vaut: "+donnees[offsetV][offsetH+1]);
+		System.out.println("SinglePremium vaut   ghjgjhgk: "+donnees[offsetV][offsetH+1]);
 
 		// Annual Premium
 		donnees[offsetV+3][offsetH]="Annual Premium   ";
-		donnees[offsetV+3][offsetH+1]=""; //TODO Paraita
+		donnees[offsetV+3][offsetH+1]=Calcul.annualPremium(payment, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+"";
 		fenetre.createurPanelJTable(entetes, donnees);
 	}
 
@@ -601,7 +601,7 @@ public class Tree extends JTree implements ActionListener{
 		donnees[offsetV+9][offsetH]="Annual Premium   ";
 		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
 		donnees[offsetV+10][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
-		donnees[offsetV+10][offsetH+2]=Calcul.annualPremium(term, payment, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+""; //TODO Paraita
+		donnees[offsetV+10][offsetH+2]=Calcul.annualPremium(payment, technicalRate, amount, age, fenetre.getListMortality().get(indice).getValeur())+""; //TODO Paraita
 
 		if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
 			donnees[offsetV+10][offsetH+3]="OK";

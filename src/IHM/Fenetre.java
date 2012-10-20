@@ -832,7 +832,7 @@ public class Fenetre extends JFrame implements ActionListener{
 				indice=i;
 			}
 		}
-		tree.setSelectNode(tree.getListNode().get(indice+1%tree.getListNode().size()));
+		tree.setSelectNode(tree.getListNode().get(indice+2%tree.getListNode().size()));
 		tree.remplitJTable(tree.getSelectNode());
 		tree.setSelectNode(tree.getListNode().get(indice));
 		tree.remplitJTable(tree.getSelectNode());

@@ -35,9 +35,9 @@ public abstract class Calcul {
 	}
 						/*tout est bon jusqu'ici*/
 
-	public static double SinglePremiumPE(int term ,int techRate, int amount, int age,int[] tab){
-		System.out.println(nEx(term, techRate, age, tab)+"   "+amount);
-		return nEx(term, techRate, age, tab)*amount;
+	public static double SinglePremiumPE(int payment, int techRate, int amount, int age,int[] tab){
+		System.out.println(nEx(payment, techRate, age, tab)+"   "+amount);
+		return nEx(payment, techRate, age, tab)*amount;
 	}
 
 
@@ -49,11 +49,11 @@ public abstract class Calcul {
 		return res;
 	}
 
-	public static double annualPremium(int term ,int payments ,int techRate, int amount, int age,int[] tab){
-		return SinglePremiumPE(term, techRate, amount, age, tab)/annuityFactor(term, payments, techRate, amount, age, tab);
+	public static double annualPremium(int payments ,int techRate, int amount, int age,int[] tab){
+		return SinglePremiumPE(payments, techRate, amount, age, tab)/annuityFactor(payments, techRate, amount, age, tab);
 	}
 	
-	public static double annuityFactor(int term ,int payments ,int techRate, int amount, int age,int[] tab){
+	public static double annuityFactor(int payments ,int techRate, int amount, int age,int[] tab){
 		double somme = 0;
 		for (int h = 0; h < payments; h++) {
 			somme +=  nEx(h, techRate, age, tab);
