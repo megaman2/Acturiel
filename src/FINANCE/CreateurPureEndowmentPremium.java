@@ -65,7 +65,7 @@ public void createurPanelJTable(Fenetre fenetre) {
 	donnees[offsetV+6][offsetH]="Single Premiun   ";
 	donnees[offsetV+6][offsetH+1]=amount*Double.parseDouble(donnees[offsetV][offsetH+1])*Double.parseDouble(donnees[offsetV+1][offsetH+1])+"";
 	donnees[offsetV+7][offsetH+1]=Calcul.SinglePremiumPE(age, term, technicalRate, amount, fenetre.getListMortality().get(indice).getValeur())+"";
-	if(  (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 > -1 ))){
+	if(  equals(donnees[offsetV+6][offsetH+1],donnees[offsetV+7][offsetH+1])){
 		donnees[offsetV+7][offsetH+2]="OK";
 	}else{
 		donnees[offsetV+7][offsetH+2]="ERREUR";
@@ -74,7 +74,7 @@ public void createurPanelJTable(Fenetre fenetre) {
 	donnees[offsetV+9][offsetH]="Annual Premium   ";
 	donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+"";
 	donnees[offsetV+10][offsetH+1]=(amount*(Double.parseDouble(donnees[offsetV+2][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])))+"";
-	if((Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+9][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+10][offsetH+1])*100000 > -1 ))){
+	if(  equals(donnees[offsetV+9][offsetH+1],donnees[offsetV+10][offsetH+1])){
 		donnees[offsetV+10][offsetH+2]="OK";
 	}else{
 		donnees[offsetV+10][offsetH+2]="ERREUR";

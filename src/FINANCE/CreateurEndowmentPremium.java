@@ -78,7 +78,7 @@ public class CreateurEndowmentPremium extends Contrat {
 		donnees[offsetV+6][offsetH]="Single Premiun   ";
 		donnees[offsetV+6][offsetH+1]=amount*(Double.parseDouble(donnees[offsetV+2][offsetH+1])+Double.parseDouble(donnees[offsetV+12][offsetH+1]))+""; //JUSTE
 		donnees[offsetV+7][offsetH+1]=Calcul.SinglePremium(age,payment,term, technicalRate, amount, fenetre.getListMortality().get(indice).getValeur(),"")+""; //TODO
-		if(  (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 < 1 && (Double.parseDouble(donnees[offsetV+6][offsetH+1])*100000 - Double.parseDouble(donnees[offsetV+7][offsetH+1])*100000 > -1 ))){
+		if(  equals(donnees[offsetV+6][offsetH+1],donnees[offsetV+7][offsetH+1])){
 			donnees[offsetV+7][offsetH+2]="OK";
 		}else{
 			donnees[offsetV+7][offsetH+2]="ERREUR";
@@ -87,7 +87,7 @@ public class CreateurEndowmentPremium extends Contrat {
 		donnees[offsetV+9][offsetH]="Annual Premium   ";
 		donnees[offsetV+9][offsetH+1]=Double.parseDouble(donnees[offsetV+6][offsetH+1])/Double.parseDouble(donnees[offsetV+4][offsetH+1])+""; //JUSTE
 		donnees[offsetV+10][offsetH+1]=Calcul.AnnualPremium(age, payment,term, technicalRate, amount, fenetre.getListMortality().get(indice).getValeur(),"")+"";//TODO erreur
-		if(equals(donnees[offsetV+9][offsetH+1],donnees[offsetV+10][offsetH+1])){
+		if(  equals(donnees[offsetV+9][offsetH+1],donnees[offsetV+10][offsetH+1])){
 			donnees[offsetV+10][offsetH+2]="OK";
 		}else{
 			donnees[offsetV+10][offsetH+2]="ERREUR";
