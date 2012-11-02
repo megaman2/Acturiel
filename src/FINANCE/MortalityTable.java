@@ -14,6 +14,8 @@ public class MortalityTable {
 		}
 		
 		
+		
+		
 		public void appliqueOffset(int offset){
 			for (int i = 0; i < valeur.length; i++) {
 				valeur[i]+=offset;
@@ -26,6 +28,18 @@ public class MortalityTable {
 					valeur[i]=0;
 				}
 			}	
+		}
+		
+		public int[] ratio( int a, double[] qxStressed){
+			valeur[0]=100000;
+			for (int i = 1; i < valeur.length; i++) {
+				double tmp =valeur[i-1]*(1-qxStressed[i-1]);
+				valeur[i]=(int)tmp;
+			}
+			for (int i = 0; i < qxStressed.length; i++) {
+				System.out.println(valeur[i]);
+			}
+			return valeur;
 		}
 		
 		public void maz(){
@@ -47,4 +61,6 @@ public class MortalityTable {
 		public void setNom(String nom) {
 			this.nom = nom;
 		}
+		
+		
 }

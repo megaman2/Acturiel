@@ -33,14 +33,7 @@ public abstract class Calcul {
 	public static double nEx(int term, double techRate, int age, int[] tab){
 		return npx(age, term, tab)*techDF(term, techRate);
 	}
-						/*tout est bon jusqu'ici*/
-
-	public static double SinglePremiumPE(int payment, int techRate, int amount, int age,int[] tab){
-		System.out.println(nEx(payment, techRate, age, tab)+"   "+amount);
-		return nEx(payment, techRate, age, tab)*amount;
-	}
-
-
+	
 	public static double nAx(int age, int term, int techRate, int[] tab){
 		double res=0.0;
 		for (int i = 0; i < term; i++) {
@@ -49,11 +42,25 @@ public abstract class Calcul {
 		return res;
 	}
 
-	public static double annualPremium(int payments ,int techRate, int amount, int age,int[] tab){
-		return SinglePremiumPE(payments, techRate, amount, age, tab)/annuityFactor(payments, techRate, amount, age, tab);
+	public static double SinglePremiumPE(int age, int term, int techRate, int amount, int[] tab){
+		return nEx(term, techRate, age, tab)*amount;
 	}
 	
-	public static double annuityFactor(int payments ,int techRate, int amount, int age,int[] tab){
+	
+	public static double SinglePremiumTA(int age, int term, int techRate, int benefit, int[] tab) {
+		return nAx(age, term, techRate,tab)*benefit;
+	}	
+	
+	public static double SinglePremiumEnd(int age, int payment, int term, int techRate , int amount, int[] tab){
+		
+		return SinglePremiumTA(age, term, techRate, amount, tab )+ SinglePremiumPE(age, term, techRate, amount, tab );
+	}
+	
+	
+	/*tout est bon jusqu'ici*/
+
+
+	public static double annuityFactor(int age,int payments ,int techRate, int amount, int[] tab){
 		double somme = 0;
 		for (int h = 0; h < payments; h++) {
 			somme +=  nEx(h, techRate, age, tab);
@@ -61,88 +68,33 @@ public abstract class Calcul {
 		return somme;
 	}
 
-	public static double SinglePremium(int age, int term,int techRate, int benefit,int[] tab,String contract){
+	public static double SinglePremium(int age, int payments,int term ,int techRate, int amount,int[] tab,String contract){
 		if(contract.equals("Term Assurance")){
-			return SinglePremiumTA(age, term, techRate, benefit,tab);
+			System.out.println("on calcule le Term Assurance");
+			return SinglePremiumTA(age, term, techRate, amount,tab);
 		}else if(contract.equals("Pure Endowment")){
-			return SinglePremiumPE(term, techRate, benefit,age,tab);
+			System.out.println("on calcule le Pure Endowment");
+			return SinglePremiumPE(age,term, techRate, amount,tab);
 		}else {
-			return SinglePremiumEnd(age, term, techRate, benefit,age,tab);
+			System.out.println("on calcule le END");
+			return SinglePremiumEnd(age, payments,term, techRate, amount,tab);
 		}  
 	}
 
-	public static double SinglePremiumEnd(int age, int term, int techRate, int benefit, int age2, int[] tab) {		
-		return SinglePremiumTA(age, term, techRate, benefit,tab)+SinglePremiumPE(age, term, techRate, benefit,tab);
-	}
-
-	public static double SinglePremiumTA(int age, int term, int techRate, int benefit, int[] tab) {
-		return nAx(age, term, techRate,tab)*benefit;
-	}	
-
-
-	public static double SinglePremiumEnd_p(int age, int term, int techRate ,int  benefit, int[] tab){
-		return SinglePremiumTA_p(age, term, techRate, benefit, tab )+ SinglePremiumPE_p(age, term, techRate, benefit, tab);
+	public static double AnnualPremium(int age, int payments,int term,int techRate, int amount,int[] tab,String contract){
+		if(contract.equals("Term Assurance")){
+			return SinglePremiumTA(age, term, techRate, amount,tab)/annuityFactor(age,payments, techRate, amount,tab);
+		}else if(contract.equals("Pure Endowment")){
+			return SinglePremiumPE(age,term, techRate, amount,tab)/annuityFactor(age,payments, techRate, amount,tab);
+		}else {
+			return SinglePremiumEnd(age, payments, term, techRate, amount,tab)/annuityFactor(age,payments, techRate, amount,tab);
+		}  
 	}
 
 	
 
-	public static double SinglePremium_(int age, int term, int techRate ,int  benefit,String contract ,int[] tab){
-		if(contract.equals("Term Assurance")){
-			return SinglePremiumTA_(age, term, techRate, benefit,tab);
-		}else if(contract.equals("Pure Endowment")){
-			return SinglePremiumPE_(term, techRate, benefit,age,tab);
-		}else {
-			return SinglePremiumEnd_(age, term, techRate, benefit,age,tab);
-		}  
-	}
 
-
-
-
-	private static int SinglePremiumPE_p(int age, int term, int techRate, int benefit, int[] tab) {
-		return nEx_(age, term, techRate, tab)*benefit;
-	}
-
-
-
-
-
-	private static int nEx_(int age, int term, int techRate, int[] tab) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private static int SinglePremiumTA_p(int age, int term, int techRate,
-			int benefit, int[] tab) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private static double AnnuityFactor_(int age, int term, int techRate,
-			int[] tab) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	private static double SinglePremiumEnd_(int age, int term, int techRate,
-			int benefit, int age2, int[] tab) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private static double SinglePremiumPE_(int term, int techRate, int benefit,
-			int age, int[] tab) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private static double SinglePremiumTA_(int age, int term, int techRate,
-			int benefit, int[] tab) {
-		// TODO Auto-generated method stub
-		return 0;
-	}	
+}
 
 
 
@@ -150,7 +102,11 @@ public abstract class Calcul {
 
 
 
-	/*
+
+
+
+
+/*
 
 
 
@@ -297,4 +253,3 @@ public abstract class Calcul {
 
 
 
-}

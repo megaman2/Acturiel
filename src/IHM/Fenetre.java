@@ -243,7 +243,7 @@ public class Fenetre extends JFrame implements ActionListener{
 		titreAge.setVisible(true);
 		boutonsBas.add(titreAge);
 		
-		age= new JTextField("20");
+		age= new JTextField("50");
 		boutonsBas.add(age);
 		age.setVisible(true);
 
@@ -672,7 +672,7 @@ public class Fenetre extends JFrame implements ActionListener{
 	 * Constructeur utilis�e pour les tests.
 	 * @param table 
 	 */
-	public Fenetre(ArrayList table){
+	public Fenetre(ArrayList<MortalityTable> table){
 		// on ajoute la structure de la fenetre
 		listMortality = table;
 		strutureBaseFenetre();
@@ -689,7 +689,6 @@ public class Fenetre extends JFrame implements ActionListener{
 	 * Cree une fenetre, et g�re ce qu'il doit etre affich� en son centre.
 	 * C'est la fenetre principale, celle que l'utilisateur verra le plus.
 	 */
-	@SuppressWarnings("unchecked")
 
 
 	/**
@@ -832,7 +831,7 @@ public class Fenetre extends JFrame implements ActionListener{
 				indice=i;
 			}
 		}
-		tree.setSelectNode(tree.getListNode().get(indice+2%tree.getListNode().size()));
+		tree.setSelectNode(tree.getListNode().get((indice+2)%tree.getListNode().size()));
 		tree.remplitJTable(tree.getSelectNode());
 		tree.setSelectNode(tree.getListNode().get(indice));
 		tree.remplitJTable(tree.getSelectNode());
@@ -910,6 +909,14 @@ public class Fenetre extends JFrame implements ActionListener{
 
 	public void setDroite(JPanel droite) {
 		this.droite = droite;
+	}
+
+	public JComboBox getChoixContrat() {
+		return choixContrat;
+	}
+
+	public void setChoixContrat(JComboBox choixContrat) {
+		this.choixContrat = choixContrat;
 	}
 
 
